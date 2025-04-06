@@ -12,10 +12,11 @@ const PORT = 3000;
 app.use(cors());
 //CONEXIÓN
 const db = mysql.createConnection({
-    host: 'localhost',
+    host: 'shortline.proxy.rlwy.net',
     user: 'root',
-    password: '',
-    database: 'bd_mensajeria'
+    password: 'ObOvdDRvZEqieXSaRPAMORKnUVnMexFA',
+    database: 'railway',
+    port: '21478'
 });
 
 db.connect((err) => {
