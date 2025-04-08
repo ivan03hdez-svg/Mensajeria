@@ -12,12 +12,14 @@ const PORT = 3000;
 app.use(cors());
 //CONEXIÓN
 const db = mysql.createConnection({
-    host: 'shortline.proxy.rlwy.net',
+    host: 'gondola.proxy.rlwy.net',
     user: 'root',
-    password: 'ObOvdDRvZEqieXSaRPAMORKnUVnMexFA',
+    password: 'fUhzyFMOFdPHYPckkWNpTEGhFsiLnesV',
     database: 'railway',
-    port: '21478'
+    port: '13768'
 });
+
+//mysql://root:fUhzyFMOFdPHYPckkWNpTEGhFsiLnesV@gondola.proxy.rlwy.net:13768/railway
 
 db.connect((err) => {
     if(err){
