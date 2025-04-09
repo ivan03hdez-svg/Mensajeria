@@ -78,8 +78,8 @@ app.post('/login', (request, result) => {
             if(err){
                 return result.status(500).json({ error: 'Error al verificar la Contraseña'});
             }
-            if(!isEqual){
-                result.status(401).json({ mensaje: 'Contraseña Incorrecta' });
+            if (!isEqual) {
+                return result.status(401).json({ mensaje: 'Contraseña Incorrecta' });
             }
             result.status(200).json({ mesaje: 'Login Exitoso', usuario: {
                 id: user.UsuarioId, 
