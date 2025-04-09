@@ -61,29 +61,33 @@ app.post('/login', (request, result) => {
     const sql = 'SELECT * FROM tbl_usuarios WHERE Usuario_Nombre = ?';
 
     db.query(sql, [usuario], (err, rows) => {
-        if(err){
+        if (err) {
             console.error('Error en el Login: ', err);
-            return result.status(500).json({ error: 'Error en el Servidor'});
+            return result.status(500).json({ error: 'Error en el Servidor' });
         }
-        if(rows.length === 0){
-            result.status(401).json({ mensaje: 'Usuario no encontrado' });
+
+        if (rows.length === 0) {
+            return result.status(401).json({ mensaje: 'Usuario no encontrado' });
         }
+
         const user = rows[0];
-        //COMPARAR CONTRASEÑAS
-        bcrypt.compare(contra, user.Usuario_Contrasenia, (err, isEqual) => {
-            if(err){
-                return result.status(500).json({ error: 'Error al verificar la Contraseña'});
+
+        // COMPARACIÓN DIRECTA DE CONTRASEÑA
+        if (contra !== user.Usuario_Contrasenia) {
+            return result.status(401).json({ mensaje: 'Contraseña Incorrecta' });
+        }
+
+        // SI TODO ES CORRECTO
+        return result.status(200).json({
+            mesaje: 'Login Exitoso',
+            usuario: {
+                id: user.UsuarioId,
+                nombre: `${user.Usuario_Nombre} ${user.Usuario_APaterno} ${user.Usuario_AMaterno}`
             }
-            if (!isEqual) {
-                return result.status(401).json({ mensaje: 'Contraseña Incorrecta' });
-            }
-            result.status(200).json({ mesaje: 'Login Exitoso', usuario: {
-                id: user.UsuarioId, 
-                nombre: user.Usuario_Nombre + ' ' + user.Usuario_APaterno + ' ' + user.Usuario_AMaterno
-            } });
         });
     });
 });
+
 
 // RUTA CONSULTA DE USUARIOS
 app.get('/obtenerUsuarios', (request, result) => {
