@@ -1,10 +1,6 @@
 const cors = require('cors');
-
-const bcrypt = require('bcrypt');
 const mysql = require('mysql2');
 const express = require('express');
-
-const saltRounds = 10;
 
 const app = express();
 const PORT = 3000;
@@ -39,24 +35,24 @@ app.get('/', (request, result) => {
 
 // RUTA REGISTRAR USUARIOS
 app.post('/usuarios', (request, result) => {
-    const {Nombre, Apaterno, Amaterno, Usuario, Contra} = request.body;
+    const { Nombre, Apaterno, Amaterno, Usuario, Contra } = request.body;
 
-    bcrypt.hash(Contra, saltRounds, (err, hash) => {
-        if(err){
-            console.error('Error al hashear la contraseña: ', err);
-            return result.status(500).json({ error: 'Error en el servidor'});
+    const sql = `
+        INSERT INTO tbl_usuarios 
+        (Usuario_Nombre, Usuario_APaterno, Usuario_AMaterno, Usuario_Usuario, Usuario_Contrasenia, Usuario_fecCreacion) 
+        VALUES (?, ?, ?, ?, ?, NOW())
+    `;
+
+    db.query(sql, [Nombre, Apaterno, Amaterno, Usuario, Contra], (err, dbResult) => {
+        if (err) {
+            console.error('Error al registrar usuario: ', err);
+            return result.status(500).json({ error: 'No se pudo registrar el usuario' });
         }
-        const sql = 'INSERT INTO tbl_usuarios (Usuario_Nombre, Usuario_APaterno, Usuario_AMaterno, Usuario_Usuario, Usuario_Contrasenia, Usuario_fecCreacion) VALUES (?,?,?,?,?,NOW())';
 
-        db.query(sql, [Nombre, Apaterno, Amaterno, Usuario, hash], (err, dbResult) => {
-            if(err){
-                console.error('Error al registrar usuario: ', err);
-                return result.status(500).json({ error: 'No se pudo registrar el usuario'});
-            }
-            result.status(201).json({ mensaje: 'Usuario creado con éxito', id: dbResult.insertId });
-        });
+        result.status(201).json({ mensaje: 'Usuario creado con éxito', id: dbResult.insertId });
     });
 });
+
 
 // RUTA LOGIN
 app.post('/login', (request, result) => {
