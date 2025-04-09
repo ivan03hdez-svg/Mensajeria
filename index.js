@@ -58,7 +58,7 @@ app.post('/usuarios', (request, result) => {
 app.post('/login', (request, result) => {
     const { usuario, contra } = request.body;
 
-    const sql = 'SELECT * FROM tbl_usuarios WHERE Usuario_Nombre = ?';
+    const sql = 'SELECT * FROM tbl_usuarios WHERE Usuario_Usuario = ?';
 
     db.query(sql, [usuario], (err, rows) => {
         if (err) {
