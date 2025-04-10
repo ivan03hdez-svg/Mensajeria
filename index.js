@@ -91,7 +91,7 @@ app.post('/login', (request, result) => {
 
 // RUTA CONSULTA DE USUARIOS
 app.get('/obtenerUsuarios', (request, result) => {
-    const sql = `SELECT CONCAT(Usuario_Nombre, ' ', Usuario_APaterno, ' ', Usuario_AMaterno) AS Nombre FROM tbl_usuarios`;
+    const sql = `SELECT UsuarioId, CONCAT(Usuario_Nombre, ' ', Usuario_APaterno, ' ', Usuario_AMaterno) AS Nombre FROM tbl_usuarios`;
 
     db.query(sql, (err, rows) => {
         if(err){
