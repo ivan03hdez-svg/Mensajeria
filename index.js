@@ -130,7 +130,7 @@ app.post('/envioMensajes', (request, result) => {
 app.get('/verMensajes', (request,result) => {
     const {user1, user2} = request.query;
 
-    const sql = `SELECT m.MensajeId, m.Mensaje_EmisorId, m.Mensaje_ReceptorId, m.Mensaje_Contenido, m.Mensaje_FecEnvio,
+    const sql = `SELECT m.MensajeId, m.Mensaje_Contenido, m.Mensaje_FecEnvio,
                     CONCAT(u1.Usuario_Nombre, ' ', u1.Usuario_APaterno, ' ', u1.Usuario_AMaterno) AS Remitente,
                     CONCAT(u2.Usuario_Nombre, ' ', u2.Usuario_APaterno, ' ', u2.Usuario_AMaterno) AS Destinatario
                     FROM tbl_mensajes m 
