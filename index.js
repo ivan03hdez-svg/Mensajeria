@@ -103,18 +103,21 @@ app.get('/obtenerUsuarios', (request, result) => {
 });
 
 // RUTA ENVIAR MENSAJE
-app.post('/envioMensajes',(request,result) => {
-    const {remitenteId, destinatarioId, mensaje } = request.body;
+app.post('/envioMensajes', (request, result) => {
+    const { remitenteId, destinatarioId, mensaje } = request.body;
 
-    const sql = `INSERT INTO tbl_mensajes (Mensaje_EmisorId,Mensaje_ReceptorId,Mensaje_Contenido,Mensaje_FecEnvio) VALUES (?,?,?,NOW())`;
-    db.query(sql, [remitenteId, destinatarioId, mensaje], (err, result) => {
-        if(err){
-            console.error('Error al enviar mensaje: ',err);
-            return result.status(500).json({ error: 'No se pudo enviar el mensaje'});
+    const sql = `INSERT INTO tbl_mensajes (Mensaje_EmisorId, Mensaje_ReceptorId, Mensaje_Contenido, Mensaje_FecEnvio) 
+                 VALUES (?, ?, ?, NOW())`;
+
+    db.query(sql, [remitenteId, destinatarioId, mensaje], (err, queryResult) => {
+        if (err) {
+            console.error('Error al enviar mensaje: ', err);
+            return result.status(500).json({ error: 'No se pudo enviar el mensaje' });
         }
-        result.status(201).json({ mensaje: 'Mensaje enviado con éxito', id: result.insertId });
+        result.status(201).json({ mensaje: 'Mensaje enviado con éxito', id: queryResult.insertId });
     });
 });
+
 
 // RUTA VER MENSAJES    
 app.get('/verMensajes', (request,result) => {
