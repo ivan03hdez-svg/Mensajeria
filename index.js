@@ -89,18 +89,25 @@ app.post('/login', (request, result) => {
 });
 
 
-// RUTA CONSULTA DE USUARIOS
-app.get('/obtenerUsuarios', (request, result) => {
-    const sql = `SELECT UsuarioId, CONCAT(Usuario_Nombre, ' ', Usuario_APaterno, ' ', Usuario_AMaterno) AS Nombre FROM tbl_usuarios`;
+app.get('/obtenerUsuarios', (req, res) => {
+    const usuarioId = req.query.usuarioId; // El ID del usuario que inició sesión
 
-    db.query(sql, (err, rows) => {
-        if(err){
+    if (!usuarioId) {
+        return res.status(400).json({ error: 'Falta el parámetro usuarioId' });
+    }
+    const sql = `
+        SELECT UsuarioId, CONCAT(Usuario_Nombre, ' ', Usuario_APaterno, ' ', Usuario_AMaterno) AS Nombre FROM tbl_usuarios 
+        WHERE UsuarioId != ?`;
+
+    db.query(sql, [usuarioId], (err, rows) => {
+        if (err) {
             console.error('Error al obtener los usuarios: ', err);
-            return result.status(500).json({ error: 'Error en el servidor' });
+            return res.status(500).json({ error: 'Error en el servidor' });
         }
-        result.status(200).json({ mensaje: 'Usuarios obtenidos', usuarios: rows });
+        res.status(200).json({ mensaje: 'Usuarios obtenidos', usuarios: rows });
     });
 });
+
 
 // RUTA ENVIAR MENSAJE
 app.post('/envioMensajes', (request, result) => {
