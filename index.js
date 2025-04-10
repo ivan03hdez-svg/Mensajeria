@@ -126,7 +126,7 @@ app.get('/verMensajes', (request,result) => {
                     FROM tbl_mensajes m 
                     INNER JOIN tbl_usuarios u1 ON m.Mensaje_EmisorId = u1.UsuarioId
                     INNER JOIN tbl_usuarios u2 ON m.Mensaje_ReceptorId = u2.UsuarioId
-                    WHERE (m.Remitente_ID = ? AND m.Destinatario_ID = ?) OR (m.Remitente_ID = ? AND m.Destinatario_ID = ?)
+                    WHERE (m.Mensaje_EmisorId = ? AND m.Mensaje_ReceptorId = ?) OR (m.Mensaje_EmisorId = ? AND m.Mensaje_ReceptorId = ?)
                     ORDER BY m.Mensaje_FecEnvio ASC;`;
     
     db.query(sql, [user1, user2, user2, user1], (err, rows) => {
